@@ -1,0 +1,203 @@
+/* General Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Body Styling */
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: hsl(220, 100%, 8%);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  padding: 20px;
+}
+
+/* Header (Welcome Message) */
+header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+h1 {
+  font-size: 3rem;
+  color: #ffffff;
+}
+
+.highlight {
+  color: hsl(259, 49%, 60%);
+}
+
+.welcome-text {
+  font-size: 1.2rem;
+  color: #f1f1f1;
+  margin-top: 20px;
+}
+
+/* Main Section Flexbox Styling */
+.main-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 90%;
+  margin: 0 auto;
+  gap: 10%;
+}
+
+/* Image Container */
+.image-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  left: 10%;
+}
+
+.image-container img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+}
+
+/* Button Container with Subjects */
+.button-container {
+  flex: 1;
+  display: flex;
+  justify-content: flex-start;
+  position: relative;
+  left: 10%;
+}
+
+.subject-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+/* Buttons Styling */
+.subject-btn {
+  padding: 15px 40px;
+  background: linear-gradient(135deg, rgb(108, 70, 191), rgb(53, 10, 142));
+  border: none;
+  border-radius: 30px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: white;
+  text-transform: uppercase;
+  cursor: pointer;
+  width: 100%;
+  max-width: 300px;
+  transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.subject-btn:hover {
+  transform: scale(1.1);
+  background: linear-gradient(135deg, rgb(53, 10, 142), rgb(108, 70, 191));
+}
+
+.subject-btn:focus {
+  outline: none;
+}
+
+
+/* Responsive Styling */
+@media (max-width: 840px) {
+    body {
+        height: 120vh;
+      }
+
+.image-container, .button-container {
+  position: static;
+}
+
+.image-container img {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+}
+
+  .main-section {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .subject-list {
+    align-items: center;
+    margin: 50px auto;
+  }
+
+  .image-container,
+  .button-container {
+    flex: none;
+    width: 100%;
+  }
+
+  .image-container{
+    width: 70%;
+  }
+  h1 {
+    font-size: 2.5rem;
+  }
+
+  .subject-btn {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 320px) {
+  body{
+    height: 155vh;
+  }
+}
+
+/* Loading Screen Styling */
+#loading-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+/* Spinner Animation */
+.spinner {
+  border: 8px solid rgba(53, 10, 142, 0.2);
+  border-top: 8px solid rgb(53, 10, 142);
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Hide Loading Screen */
+#loading-screen.hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
