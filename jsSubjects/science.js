@@ -102,9 +102,9 @@ const questions = [
 ];
 
 
-// Declare variables to track the score and the current question
 let score = 0;
 let currentQuestionIndex = 0;
+const answeredQuestions = {}; 
 
 // Function to load the current question
 function loadQuestion() {
@@ -116,7 +116,7 @@ function loadQuestion() {
     const submitButton = document.getElementById('submit-button');
     
     questionText.textContent = question.question;
-    optionsContainer.innerHTML = ''; // Clear previous options
+    optionsContainer.innerHTML = ''; 
 
     // Create option buttons
     question.options.forEach(option => {
@@ -124,19 +124,28 @@ function loadQuestion() {
         optionButton.classList.add('option-btn');
         optionButton.textContent = option;
         optionButton.onclick = () => handleOptionClick(optionButton, option);
+
+        // Apply previously saved styles if the question was answered
+        if (answeredQuestions[currentQuestionIndex]) {
+            const savedAnswer = answeredQuestions[currentQuestionIndex];
+            
+            // Keep the incorrect answer selected and styled
+            if (savedAnswer.selectedOption === option) {
+                optionButton.classList.add(savedAnswer.isCorrect ? 'correct' : 'incorrect');
+            }
+            // Always show the correct answer with a distinct style
+            if (option === question.correctAnswer) {
+                optionButton.classList.add('correct');
+            }
+            optionButton.disabled = true; // Disable option once answered
+        }
+
         optionsContainer.appendChild(optionButton);
     });
 
     // Show or hide the next/prev buttons
-    if (currentQuestionIndex === questions.length - 1) {
-        nextButton.style.display = 'none';
-        submitButton.style.display = 'block'; // Show submit button at the last question
-    } else {
-        nextButton.style.display = 'block';
-        submitButton.style.display = 'none'; // Hide submit button if not last question
-    }
-
-    // Disable previous button for the first question
+    nextButton.style.display = currentQuestionIndex === questions.length - 1 ? 'none' : 'block';
+    submitButton.style.display = currentQuestionIndex === questions.length - 1 ? 'block' : 'none';
     prevButton.style.display = currentQuestionIndex === 0 ? 'none' : 'block';
 }
 
@@ -146,18 +155,26 @@ function handleOptionClick(button, selectedOption) {
     const allOptionButtons = document.querySelectorAll('.option-btn');
 
     // Disable all buttons once an answer is selected
-    allOptionButtons.forEach(button => button.disabled = true);
+    allOptionButtons.forEach(btn => btn.disabled = true);
 
     // Check if the selected option is correct
-    if (selectedOption === question.correctAnswer) {
+    const isCorrect = selectedOption === question.correctAnswer;
+    if (isCorrect) {
         button.classList.add('correct');
         score++;
     } else {
         button.classList.add('incorrect');
-        // Highlight the correct answer
+        
+        // Highlight the correct option
         const correctOptionButton = [...allOptionButtons].find(btn => btn.textContent === question.correctAnswer);
         correctOptionButton.classList.add('correct');
     }
+
+    // Save the answer details
+    answeredQuestions[currentQuestionIndex] = {
+        selectedOption,
+        isCorrect
+    };
 }
 
 // Function to go to the next question
@@ -176,13 +193,12 @@ function prevQuestion() {
     }
 }
 
-// Function to show the score at the end
+// Function to show the final score
 function showScore() {
     const scoreDisplay = document.getElementById('score-display');
     scoreDisplay.textContent = `Your score: ${score} out of ${questions.length}`;
     document.getElementById('quiz-container').innerHTML = ''; // Clear the quiz container
 
-    // Create a new div for the "Play Again" and "Main Menu" buttons
     const endOptions = document.createElement('div');
     
     // Play Again Button
@@ -197,7 +213,6 @@ function showScore() {
     mainMenuButton.onclick = () => goToMainMenu();
     mainMenuButton.style.margin = '10px';
 
-    // Add the buttons to the container
     endOptions.appendChild(playAgainButton);
     endOptions.appendChild(mainMenuButton);
     document.getElementById('quiz-container').appendChild(scoreDisplay);
@@ -214,11 +229,10 @@ function goToMainMenu() {
     window.location.href = '../index.html'; 
 }
 
-
 // Load the first question
 loadQuestion();
 
-// Add event listeners for navigation buttons
+// Event listeners for navigation buttons
 document.getElementById('next-button').onclick = nextQuestion;
 document.getElementById('prev-button').onclick = prevQuestion;
 document.getElementById('submit-button').onclick = showScore;
